@@ -6,3 +6,5 @@ park EK3333 Red
 park IYTE32 Blue
 park MNG728 Black
 leave 4
+park AU7367 White
+park 999AAA White

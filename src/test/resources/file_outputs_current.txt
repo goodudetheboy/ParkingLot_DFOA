@@ -5,3 +5,6 @@ Allocated slot number: 3
 Allocated slot number: 4
 Allocated slot number: 5
 Allocated slot number: 6
+Slot number 4 is free
+Allocated slot number: 4
+Sorry, parking lot is full
