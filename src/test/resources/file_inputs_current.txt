@@ -1,1 +1,8 @@
 create_parking_lot 6
+park EUS687 White
+park 510IBD White
+park 6TRJ24 Black
+park EK3333 Red
+park IYTE32 Blue
+park MNG728 Black
+leave 4
