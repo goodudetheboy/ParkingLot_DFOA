@@ -31,7 +31,7 @@ public class InputTest {
         BufferedReader inputReader = null;
         BufferedReader outputReader = null;
         int lineNumInput = 1;
-        ParkingLotManager parkingLotManager = new ParkingLotManager();
+        ParkingLotMgr parkingLotManager = new ParkingLotMgr();
         boolean hasWrong = false;
         try {
             inputReader = new BufferedReader(new InputStreamReader(Utils.getFileFromResourceAsStream(inputFile), StandardCharsets.UTF_8));

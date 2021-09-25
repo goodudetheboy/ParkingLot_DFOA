@@ -23,5 +23,5 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'com.vuongho.parkinglot.ParkingLotManager'
+    mainClass = 'com.vuongho.parkinglot.ParkingLotMgr'
 }
