@@ -1,5 +1,8 @@
 package com.vuongho.parkinglot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Implementation of a parking lot.
  * 
@@ -194,5 +197,23 @@ public class ParkingLot {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * Returns the list of {@link Car} in this {@link ParkingLot} that has the
+     * same color as the input color.
+     * 
+     * @param color the color of the {@link Car} to be searched.
+     * @return a list of {@link Car} that has the same color as the input color.
+     */
+    public List<Car> getCarsWithColor(String color) {
+        List<Car> cars = new ArrayList<>();
+        for (int lot=0; lot < capacity; lot++) {
+            Car parkedCar = parkedCars[lot];
+            if (parkedCar != null && parkedCar.getColor().equals(color)) {
+                cars.add(parkedCar);
+            }
+        }
+        return cars;
     }
 }

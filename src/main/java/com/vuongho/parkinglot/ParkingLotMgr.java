@@ -1,5 +1,7 @@
 package com.vuongho.parkinglot;
 
+import java.util.List;
+
 /**
  * A REPL implementation for managing a {@link ParkingLot}.
  */
@@ -51,6 +53,8 @@ public class ParkingLotMgr {
                 return leave(args);
             case "status":
                 return status(args);
+            case "ids_for_cars_with_color":
+                return idsForCarsWithColor(args);
             default:
                 return "Invalid command";
         }
@@ -129,6 +133,29 @@ public class ParkingLotMgr {
             return "Invalid command";
         }
         return parkingLot.status(true);
+    }
+
+    /**
+     * Gets the license number (id) of the {@link Car} with the specified color,
+     * formatted by the following:
+     * <pre>
+     * <id1>, <id2>, <id3>,...
+     * </pre>
+     * 
+     * @param args command array
+     * @return the license number of the {@link Car}s with the specified color
+     */
+    private String idsForCarsWithColor(String[] args) {
+        if (args.length != 2) {
+            return "Invalid command";
+        }
+        String color = args[1];
+        List<Car> cars = parkingLot.getCarsWithColor(color);
+        StringBuilder sb = new StringBuilder();
+        for (Car car : cars) {
+            sb.append(car.getLicensePlate()).append(", ");
+        }
+        return sb.substring(0, sb.length() - 2);
     }
 
     public static void main(String[] args) throws ParkingLotException {
