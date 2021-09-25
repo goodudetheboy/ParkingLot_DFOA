@@ -3,7 +3,7 @@ package com.vuongho.parkinglot;
 /**
  * An exception class for ParkingLot.
  */
-public class ParkingLotException extends RuntimeException {
+public class ParkingLotException extends Exception {
     /**
      * Construct a runtime exception from a message
      * 
