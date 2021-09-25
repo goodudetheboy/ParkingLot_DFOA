@@ -16,3 +16,5 @@ slot_numbers_for_cars_with_color White
 slot_numbers_for_cars_with_color Black
 slot_numbers_for_cars_with_color Blue
 slot_numbers_for_cars_with_color Red
+slot_number_for_id MNG728
+slot_number_for_id 045BKR
