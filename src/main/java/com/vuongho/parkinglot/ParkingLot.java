@@ -1,7 +1,5 @@
 package com.vuongho.parkinglot;
 
-import java.rmi.UnexpectedException;
-
 /**
  * Implementation of a parking lot.
  * 
@@ -62,6 +60,13 @@ public class ParkingLot {
     }
 
     /**
+     * @return true if the {@link ParkingLot} is full, false otherwise.
+     */
+    public boolean isFull() {
+        return currentSize == capacity;
+    }
+
+    /**
      * Sets the capacity of the {@link ParkingLot}.
      * 
      * @param capacity
@@ -106,10 +111,25 @@ public class ParkingLot {
     }
 
     /**
-     * Checks a car out of the {@link ParkingLot} based on , and returns the {@link}
+     * Checks if a specific parking lot is occupied.
+     * 
+     * @param lot the index of the parking lot.
+     * @return true if the specified parking lot is occupied, false otherwise.
+     */
+    public boolean isEmptyLot(int lot) {
+        if (lot < 0 || lot >= capacity) {
+            throw new ParkingLotException("Invalid lot number");
+        }
+        return parkedCars[lot] == null;
+    }
+
+    /**
+     * Checks a car out of the {@link ParkingLot} based on the lot number, and
+     * returns the {@link Car} that was parked in the specified lot.
      * 
      * @param lot
-     * @return
+     * @return the {@link Car} that was parked in the specified lot, null if none found.
+     * @throws ParkingLotException if the lot number is invalid
      */
     public Car leave(int lot) {
         if (lot < 0 || lot >= capacity) {
