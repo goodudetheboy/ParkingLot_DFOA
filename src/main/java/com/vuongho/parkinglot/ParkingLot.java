@@ -84,7 +84,7 @@ public class ParkingLot {
      * @return the number of lot that the {@link Car} was parked in.
      * @throws ParkingLotException if there is no space.
      */
-    public int park(Car car) {
+    public int park(Car car) throws ParkingLotException {
         if (currentSize < capacity) {
             int emptyLot = getEmptyLot();
             parkedCars[emptyLot] = car;
@@ -93,6 +93,21 @@ public class ParkingLot {
         } else {
             throw new ParkingLotException("Sorry, parking lot is full");
         }
+    }
+
+    /**
+     * Creates then parks a {@link Car} in the {@link ParkingLot} with the
+     * input license number and color, if capacity haven't been reached. 
+     * Returns the number of lot that the {@link Car} was parked in.
+     * If there is no space, throws a {@link ParkingLotException}.
+     * 
+     * @param car the {@link Car} to be parked.
+     * @return the number of lot that the {@link Car} was parked in.
+     * @throws ParkingLotException if there is no space.
+     */
+    public int park(String licenseNumber, String color) throws ParkingLotException {
+        Car parkedCar = new Car(licenseNumber, color);
+        return park(parkedCar);
     }
 
     /**
@@ -115,8 +130,9 @@ public class ParkingLot {
      * 
      * @param lot the index of the parking lot.
      * @return true if the specified parking lot is occupied, false otherwise.
+     * @throws ParkingLotException if the index is out of range.
      */
-    public boolean isEmptyLot(int lot) {
+    public boolean isEmptyLot(int lot) throws ParkingLotException {
         if (lot < 0 || lot >= capacity) {
             throw new ParkingLotException("Invalid lot number");
         }
@@ -131,7 +147,7 @@ public class ParkingLot {
      * @return the {@link Car} that was parked in the specified lot, null if none found.
      * @throws ParkingLotException if the lot number is invalid
      */
-    public Car leave(int lot) {
+    public Car leave(int lot) throws ParkingLotException {
         if (lot < 0 || lot >= capacity) {
             throw new ParkingLotException("Invalid lot number");
         }
@@ -142,5 +158,41 @@ public class ParkingLot {
         parkedCars[lot] = null;
         currentSize--;
         return carToLeave;
+    }
+
+    /**
+     * Gets a formatted string of a current status of the parking lot, in this form:
+     * <pre>
+     * Slot No. ID      Color
+     * 1        EUS687  White
+     * 2        510IBD  White
+     * 3        Empty
+     * 5        IYTE32  Blue
+     * 6        MNG728  Black
+     * """
+     * </pre>
+     * If {@code fullInfo} is true, the status string returned will denotes all
+     * lot status: if the lot is empty, it will be marked with "Empty".
+     * Otherwise, the returning string only contains lot that are not empty
+     * 
+     * @param fullInfo true if want to get the full status (including empty lot),
+     *      false otherwise.
+     * @return a formatted string of the current status of the parking lot.
+     */
+    public String status(boolean fullInfo) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Slot No.\tID\t\tColor\n");
+        for (int lot=0; lot < capacity; lot++) {
+            boolean isOccupied = (parkedCars[lot] != null);
+            sb.append(lot+1).append("\t\t");
+            if (!isOccupied && fullInfo) {
+                sb.append("(empty)\n");
+            } else {
+                Car parkedCar = parkedCars[lot];
+                sb.append(parkedCar.getLicensePlate()).append("\t\t");
+                sb.append(parkedCar.getColor()).append("\n");
+            }
+        }
+        return sb.toString();
     }
 }

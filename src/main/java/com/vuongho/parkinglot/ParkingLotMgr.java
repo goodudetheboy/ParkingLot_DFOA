@@ -49,11 +49,19 @@ public class ParkingLotMgr {
                 return park(args);
             case "leave":
                 return leave(args);
+            case "status":
+                return status(args);
             default:
                 return "Invalid command";
         }
     }
 
+    /**
+     * Creates a {@link ParkingLot} with a capacity of the input {@link capacity}.
+     *
+     * @param args
+     * @return
+     */
     private String createParkingLot(String[] args) {
         if (args.length != 2) {
             return "Invalid command";
@@ -63,6 +71,14 @@ public class ParkingLotMgr {
         return "Created a parking lot with " + capacity + " slots";
     }
 
+    /**
+     * Parks a {@link Car} taken from the input args. {@link Car}'s detail must
+     * contain a registration number and its color.
+     * 
+     * @param args command array
+     * @return appropriate message from processing the command
+     * @throws ParkingLotException
+     */
     private String park(String[] args) {
         if (args.length != 3) {
             return "Invalid command";
@@ -73,26 +89,51 @@ public class ParkingLotMgr {
         String registrationNumber = args[1];
         String color = args[2];
         Car car = new Car(registrationNumber, color);
-        int slotNumber = parkingLot.park(car);
+        int slotNumber;
+        try {
+            slotNumber = parkingLot.park(car);
+        } catch (ParkingLotException e) {
+            return e.getMessage();
+        }
         return "Allocated slot number: " + (slotNumber + 1);
     }
 
+    /**
+     * Checks a {@link Car}'s out of the specified lot number.
+     * 
+     * @param args command array
+     * @return appropriate message from processing the command
+     */
     private String leave(String[] args) {
         if (args.length != 2) {
             return "Invalid command";
         }
         int slotNumber = Integer.parseInt(args[1]);
-        if (parkingLot.isEmptyLot(slotNumber)) {
-            return "Invalid slot number";
+        try {
+            parkingLot.leave(slotNumber-1);
+        } catch (ParkingLotException e) {
+            return e.getMessage();
         }
-        parkingLot.leave(slotNumber);
         return "Slot number " + slotNumber + " is free";
     }
 
-    public static void main(String[] args) {
-        ParkingLot parkingLot = new ParkingLot(6);
-        for (Car car : parkingLot.getParkedCars()) {
-            System.out.println(car);
+    /**
+     * Checks the status of the current {@link ParkingLot} stored in this
+     * {@link ParkingLotMgr}.
+     * 
+     * @param args command array
+     * @return the string status of the current {@link ParkingLot}
+     */
+    private String status(String[] args) {
+        if (args.length != 1) {
+            return "Invalid command";
         }
+        return parkingLot.status(true);
+    }
+
+    public static void main(String[] args) throws ParkingLotException {
+        ParkingLot parkingLot = new ParkingLot(6);
+        parkingLot.park("your12", "Dark Brown");
+        System.out.println(parkingLot.status(true));
     }
 }

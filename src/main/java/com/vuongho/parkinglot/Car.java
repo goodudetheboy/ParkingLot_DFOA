@@ -49,4 +49,9 @@ public class Car {
     public void setColor(String color) {
         this.color = color;
     }
+
+    @Override
+    public String toString() {
+        return "License plate:" + licensePlate + ", color:" + color + "]";
+    }
 }
