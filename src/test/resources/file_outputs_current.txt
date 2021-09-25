@@ -1,0 +1,1 @@
+Created a parking lot with 6 slots
