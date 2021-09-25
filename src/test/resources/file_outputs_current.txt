@@ -8,3 +8,6 @@ Allocated slot number: 6
 Slot number 4 is free
 Allocated slot number: 4
 Sorry, parking lot is full
+EUS687, 510IBD, AU7367
+6TRJ24, MNG728
+IYTE32
