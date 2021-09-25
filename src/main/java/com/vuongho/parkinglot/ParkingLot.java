@@ -216,4 +216,32 @@ public class ParkingLot {
         }
         return cars;
     }
+
+    /**
+     * Returns the list of {@link Car} in this {@link ParkingLot} that has the
+     * same color as the input color.
+     * 
+     * @param color the color of the {@link Car} to be searched.
+     * @return a list of {@link Car} that has the same color as the input color.
+     */
+    public List<Integer> getSlotsNumberForCarsWithColor(String color) {
+        List<Integer> slots = new ArrayList<>();
+        for (int lot=0; lot < capacity; lot++) {
+            Car parkedCar = parkedCars[lot];
+            if (parkedCar != null && parkedCar.getColor().equals(color)) {
+                slots.add(lot);
+            }
+        }
+        return slots;
+    }
+
+    public int getSlotNumberForId(String id) {
+        for (int lot=0; lot < capacity; lot++) {
+            Car parkedCar = parkedCars[lot];
+            if (parkedCar != null && parkedCar.getLicensePlate().equals(id)) {
+                return lot;
+            }
+        }
+        return -1;
+    }
 }

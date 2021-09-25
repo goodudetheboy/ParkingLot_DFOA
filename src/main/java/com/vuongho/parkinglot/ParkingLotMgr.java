@@ -55,6 +55,10 @@ public class ParkingLotMgr {
                 return status(args);
             case "ids_for_cars_with_color":
                 return idsForCarsWithColor(args);
+            case "slot_numbers_for_cars_with_color":
+                return slotNumbersForCarsWithColor(args);
+            case "slot_number_for_id":
+                return slotNumberForId(args);
             default:
                 return "Invalid command";
         }
@@ -151,11 +155,54 @@ public class ParkingLotMgr {
         }
         String color = args[1];
         List<Car> cars = parkingLot.getCarsWithColor(color);
+        // checks in case there is no car with the specified color
+        if (cars.size() == 0) {
+            return "";
+        }
         StringBuilder sb = new StringBuilder();
         for (Car car : cars) {
             sb.append(car.getLicensePlate()).append(", ");
         }
         return sb.substring(0, sb.length() - 2);
+    }
+
+    /**
+     * Gets the slot number of the {@link Car} with the specified color,
+     * formatted by the following:
+     * <pre>
+     * <slot1>, <slot2>, <slot3>,...
+     * </pre>
+     * 
+     * @param args command array
+     * @return the license number of the {@link Car}s with the specified color
+     */
+    private String slotNumbersForCarsWithColor(String[] args) {
+        if (args.length != 2) {
+            return "Invalid command";
+        }
+        String color = args[1];
+        List<Integer> slots = parkingLot.getSlotsNumberForCarsWithColor(color);
+        StringBuilder sb = new StringBuilder();
+        // checks in case there is no car with the specified color
+        if (slots.size() == 0) {
+            return "";
+        }
+        for (Integer slot : slots) {
+            sb.append(slot + 1).append(", ");
+        }
+        return sb.substring(0, sb.length() - 2);
+    }
+
+    private String slotNumberForId(String[] args) {
+        if (args.length != 2) {
+            return "Invalid command";
+        }
+        String id = args[1];
+        int slotNumber = parkingLot.getSlotNumberForId(id);
+        if (slotNumber == -1) {
+            return "Not found";
+        }
+        return (slotNumber + 1) + "";
     }
 
     public static void main(String[] args) throws ParkingLotException {
