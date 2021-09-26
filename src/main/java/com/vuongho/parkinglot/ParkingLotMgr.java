@@ -1,6 +1,12 @@
 package com.vuongho.parkinglot;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * A REPL implementation for managing a {@link ParkingLot}.
@@ -42,7 +48,7 @@ public class ParkingLotMgr {
      * @param args array of arguments
      * @return appropriate message from processing the command
      */
-    private String processCommand(String[] args) {
+    String processCommand(String[] args) {
         String command = args[0];
         switch (command) {
             case "create_parking_lot":
@@ -56,9 +62,9 @@ public class ParkingLotMgr {
             case "ids_for_cars_with_color":
                 return idsForCarsWithColor(args);
             case "slot_numbers_for_cars_with_color":
-                return slotNumbersForCarsWithColor(args);
+                return slotsForCarsWithColor(args);
             case "slot_number_for_id":
-                return slotNumberForId(args);
+                return slotForId(args);
             default:
                 return "Invalid command";
         }
@@ -67,14 +73,25 @@ public class ParkingLotMgr {
     /**
      * Creates a {@link ParkingLot} with a capacity of the input {@link capacity}.
      *
-     * @param args
-     * @return
+     * @param args command array
+     * @return appropriate message from processing the command
      */
-    private String createParkingLot(String[] args) {
+    String createParkingLot(String[] args) {
         if (args.length != 2) {
             return "Invalid command";
         }
         int capacity = Integer.parseInt(args[1]);
+        return createParkingLot(capacity);
+    }
+
+    /**
+     * Creates a {@link ParkingLot} with a capacity of the input {@link capacity}.
+     *
+     * 
+     * @param capacity capacity of {@link ParkingLot}
+     * @return appropriate message from creating the parking lot
+     */
+    String createParkingLot(int capacity) {
         parkingLot = new ParkingLot(capacity);
         return "Created a parking lot with " + capacity + " slots";
     }
@@ -85,25 +102,31 @@ public class ParkingLotMgr {
      * 
      * @param args command array
      * @return appropriate message from processing the command
-     * @throws ParkingLotException
      */
-    private String park(String[] args) {
+    String park(String[] args) {
         if (args.length != 3) {
             return "Invalid command";
+        }
+        String licensePlate = args[1];
+        String color = args[2];
+        return park(licensePlate, color);
+    }
+
+    String park(String licensePlate, String color) {
+        if (parkingLot == null) {
+            return "Please create a parking lot first";
         }
         if (parkingLot.isFull()) {
             return "Sorry, parking lot is full";
         }
-        String registrationNumber = args[1];
-        String color = args[2];
-        Car car = new Car(registrationNumber, color);
-        int slotNumber;
+        Car car = new Car(licensePlate, color);
+        int slot;
         try {
-            slotNumber = parkingLot.park(car);
+            slot = parkingLot.park(car);
         } catch (ParkingLotException e) {
             return e.getMessage();
         }
-        return "Allocated slot number: " + (slotNumber + 1);
+        return "Allocated slot number: " + (slot + 1);
     }
 
     /**
@@ -112,17 +135,30 @@ public class ParkingLotMgr {
      * @param args command array
      * @return appropriate message from processing the command
      */
-    private String leave(String[] args) {
+    String leave(String[] args) {
         if (args.length != 2) {
             return "Invalid command";
         }
-        int slotNumber = Integer.parseInt(args[1]);
+        int slot = Integer.parseInt(args[1]);
+        return leave(slot);
+    }
+
+    /**
+     * Checks a {@link Car}'s out of the specified lot number.
+     * 
+     * @param slot slot number
+     * @return appropriate message from processing the command
+     */
+    String leave(int slot) {
+        if (parkingLot == null) {
+            return "Please create a parking lot first";
+        }
         try {
-            parkingLot.leave(slotNumber-1);
+            parkingLot.leave(slot-1);
         } catch (ParkingLotException e) {
             return e.getMessage();
         }
-        return "Slot number " + slotNumber + " is free";
+        return "Slot number " + slot + " is free";
     }
 
     /**
@@ -132,11 +168,25 @@ public class ParkingLotMgr {
      * @param args command array
      * @return the string status of the current {@link ParkingLot}
      */
-    private String status(String[] args) {
+    String status(String[] args) {
         if (args.length != 1) {
             return "Invalid command";
         }
-        return parkingLot.status(true);
+        return status();
+    }
+
+    /**
+     * Checks the status of the current {@link ParkingLot} stored in this
+     * {@link ParkingLotMgr}.
+     * 
+     * @param args command array
+     * @return the string status of the current {@link ParkingLot}
+     */
+    String status() {
+        if (parkingLot == null) {
+            return "Please create a parking lot first";
+        }
+        return parkingLot.status(false);
     }
 
     /**
@@ -149,15 +199,32 @@ public class ParkingLotMgr {
      * @param args command array
      * @return the license number of the {@link Car}s with the specified color
      */
-    private String idsForCarsWithColor(String[] args) {
+    String idsForCarsWithColor(String[] args) {
         if (args.length != 2) {
             return "Invalid command";
         }
         String color = args[1];
+        return idsForCarsWithColor(color);
+    }
+
+    /**
+     * Gets the license number (id) of the {@link Car} with the specified color,
+     * formatted by the following:
+     * <pre>
+     * <id1>, <id2>, <id3>,...
+     * </pre>
+     * 
+     * @param args command array
+     * @return the license number of the {@link Car}s with the specified color
+     */
+    String idsForCarsWithColor(String color) {
+        if (parkingLot == null) {
+            return "Please create a parking lot first";
+        }
         List<Car> cars = parkingLot.getCarsWithColor(color);
         // checks in case there is no car with the specified color
         if (cars.size() == 0) {
-            return "";
+            return "None found";
         }
         StringBuilder sb = new StringBuilder();
         for (Car car : cars) {
@@ -176,16 +243,30 @@ public class ParkingLotMgr {
      * @param args command array
      * @return the license number of the {@link Car}s with the specified color
      */
-    private String slotNumbersForCarsWithColor(String[] args) {
+    String slotsForCarsWithColor(String[] args) {
         if (args.length != 2) {
             return "Invalid command";
         }
         String color = args[1];
+        return slotsForCarsWithColor(color);
+    }
+
+    /**
+     * Gets the slot number of the {@link Car} with the specified color,
+     * formatted by the following:
+     * <pre>
+     * <slot1>, <slot2>, <slot3>,...
+     * </pre>
+     * 
+     * @param color color of the {@link Car}
+     * @return the license number of the {@link Car}s with the specified color
+     */
+    String slotsForCarsWithColor(String color) {
         List<Integer> slots = parkingLot.getSlotsNumberForCarsWithColor(color);
         StringBuilder sb = new StringBuilder();
         // checks in case there is no car with the specified color
         if (slots.size() == 0) {
-            return "";
+            return "None found";
         }
         for (Integer slot : slots) {
             sb.append(slot + 1).append(", ");
@@ -193,21 +274,59 @@ public class ParkingLotMgr {
         return sb.substring(0, sb.length() - 2);
     }
 
-    private String slotNumberForId(String[] args) {
+    /**
+     * Gets the slot number of the {@link Car} with the specified license plate.
+     * 
+     * @param args command array
+     * @return the slot number of the {@link Car} with the specified license plate
+     */
+    String slotForId(String[] args) {
         if (args.length != 2) {
             return "Invalid command";
         }
         String id = args[1];
-        int slotNumber = parkingLot.getSlotNumberForId(id);
-        if (slotNumber == -1) {
-            return "Not found";
-        }
-        return (slotNumber + 1) + "";
+        return slotForId(id);
     }
 
-    public static void main(String[] args) throws ParkingLotException {
-        ParkingLot parkingLot = new ParkingLot(6);
-        parkingLot.park("your12", "Dark Brown");
-        System.out.println(parkingLot.status(true));
+    /**
+     * Gets the slot number of the {@link Car} with the specified license plate.
+     * 
+     * @param id license plate of the {@link Car}
+     * @return the slot number of the {@link Car} with the specified license plate
+     */
+    String slotForId(String id) {
+        if (parkingLot == null) {
+            return "Please create a parking lot first";
+        }
+        int slot = parkingLot.getSlotNumberForId(id);
+        if (slot == -1) {
+            return "Not found";
+        }
+        return (slot + 1) + "";
+    }
+
+    public static void main(String[] args) throws ParkingLotException, IOException {
+        ParkingLotMgr pMgr = new ParkingLotMgr();
+
+        if (args.length == 1) {
+            BufferedReader inputReader = new BufferedReader(new InputStreamReader(new FileInputStream(args[0]), StandardCharsets.UTF_8));
+            String command;
+            while ((command = inputReader.readLine()) != null) {
+                System.out.println(pMgr.giveCommand(command));
+            }
+            inputReader.close();
+            return;
+        }
+
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            String command = sc.nextLine();
+            if (command.equals("quit")) {
+                break;
+            }
+            String message = pMgr.giveCommand(command);
+            System.out.println(message);
+        }
+        sc.close();
     }
 }

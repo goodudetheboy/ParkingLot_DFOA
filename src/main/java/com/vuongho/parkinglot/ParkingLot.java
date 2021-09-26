@@ -80,11 +80,11 @@ public class ParkingLot {
 
     /**
      * Parks a {@link Car} in the {@link ParkingLot}, if capacity haven't been
-     * reached. Returns the number of lot that the {@link Car} was parked in.
+     * reached. Returns the number of slot that the {@link Car} was parked in.
      * If there is no space, throws a {@link ParkingLotException}.
      * 
      * @param car the {@link Car} to be parked.
-     * @return the number of lot that the {@link Car} was parked in.
+     * @return the number of slot that the {@link Car} was parked in.
      * @throws ParkingLotException if there is no space.
      */
     public int park(Car car) throws ParkingLotException {
@@ -94,18 +94,18 @@ public class ParkingLot {
             currentSize++;
             return emptyLot;
         } else {
-            throw new ParkingLotException("Sorry, parking lot is full");
+            throw new ParkingLotException("Sorry, parking slot is full");
         }
     }
 
     /**
      * Creates then parks a {@link Car} in the {@link ParkingLot} with the
      * input license number and color, if capacity haven't been reached. 
-     * Returns the number of lot that the {@link Car} was parked in.
+     * Returns the number of slot that the {@link Car} was parked in.
      * If there is no space, throws a {@link ParkingLotException}.
      * 
      * @param car the {@link Car} to be parked.
-     * @return the number of lot that the {@link Car} was parked in.
+     * @return the number of slot that the {@link Car} was parked in.
      * @throws ParkingLotException if there is no space.
      */
     public int park(String licenseNumber, String color) throws ParkingLotException {
@@ -114,10 +114,10 @@ public class ParkingLot {
     }
 
     /**
-     * Checks if there is an empty lot in the {@link ParkingLot}, and return its
-     * index. If there is no empty lot, returns -1.
+     * Checks if there is an empty slot in the {@link ParkingLot}, and return its
+     * index. If there is no empty slot, returns -1.
      * 
-     * @return the index of the empty lot, or -1 if there is no empty lot.
+     * @return the index of the empty slot, or -1 if there is no empty slot.
      */
     private int getEmptyLot() {
         for (int i=0; i < capacity; i++) {
@@ -129,42 +129,42 @@ public class ParkingLot {
     }
 
     /**
-     * Checks if a specific parking lot is occupied.
+     * Checks if a specific parking slot is occupied.
      * 
-     * @param lot the index of the parking lot.
-     * @return true if the specified parking lot is occupied, false otherwise.
+     * @param slot the index of the parking slot.
+     * @return true if the specified parking slot is occupied, false otherwise.
      * @throws ParkingLotException if the index is out of range.
      */
-    public boolean isEmptyLot(int lot) throws ParkingLotException {
-        if (lot < 0 || lot >= capacity) {
-            throw new ParkingLotException("Invalid lot number");
+    public boolean isEmptyLot(int slot) throws ParkingLotException {
+        if (slot < 0 || slot >= capacity) {
+            throw new ParkingLotException("Invalid slot number");
         }
-        return parkedCars[lot] == null;
+        return parkedCars[slot] == null;
     }
 
     /**
-     * Checks a car out of the {@link ParkingLot} based on the lot number, and
-     * returns the {@link Car} that was parked in the specified lot.
+     * Checks a car out of the {@link ParkingLot} based on the slot number, and
+     * returns the {@link Car} that was parked in the specified slot.
      * 
-     * @param lot
-     * @return the {@link Car} that was parked in the specified lot, null if none found.
-     * @throws ParkingLotException if the lot number is invalid
+     * @param slot 
+     * @return the {@link Car} that was parked in the specified slot, null if none found.
+     * @throws ParkingLotException if the slot number is invalid
      */
-    public Car leave(int lot) throws ParkingLotException {
-        if (lot < 0 || lot >= capacity) {
-            throw new ParkingLotException("Invalid lot number");
+    public Car leave(int slot) throws ParkingLotException {
+        if (slot < 0 || slot >= capacity) {
+            throw new ParkingLotException("Invalid slot number");
         }
-        if (parkedCars[lot] == null) {
+        if (parkedCars[slot] == null) {
             return null;
         }
-        Car carToLeave = parkedCars[lot];
-        parkedCars[lot] = null;
+        Car carToLeave = parkedCars[slot];
+        parkedCars[slot] = null;
         currentSize--;
         return carToLeave;
     }
 
     /**
-     * Gets a formatted string of a current status of the parking lot, in this form:
+     * Gets a formatted string of a current status of the parking slot, in this form:
      * <pre>
      * Slot No. ID      Color
      * 1        EUS687  White
@@ -175,28 +175,31 @@ public class ParkingLot {
      * """
      * </pre>
      * If {@code fullInfo} is true, the status string returned will denotes all
-     * lot status: if the lot is empty, it will be marked with "Empty".
-     * Otherwise, the returning string only contains lot that are not empty
+     * slot status: if the slot is empty, it will be marked with "Empty".
+     * Otherwise, the returning string only contains slot that are not empty
      * 
-     * @param fullInfo true if want to get the full status (including empty lot),
+     * @param fullInfo true if want to get the full status (including empty slot),
      *      false otherwise.
-     * @return a formatted string of the current status of the parking lot.
+     * @return a formatted string of the current status of the parking slot.
      */
     public String status(boolean fullInfo) {
         StringBuilder sb = new StringBuilder();
         sb.append("Slot No.\tID\t\tColor\n");
-        for (int lot=0; lot < capacity; lot++) {
-            boolean isOccupied = (parkedCars[lot] != null);
-            sb.append(lot+1).append("\t\t");
-            if (!isOccupied && fullInfo) {
-                sb.append("(empty)\n");
+        for (int slot=0; slot < capacity; slot++) {
+            boolean isOccupied = (parkedCars[slot] != null);
+            if (!isOccupied) {
+                if (fullInfo) {
+                    sb.append(slot+1).append("\t\t(empty)\n");
+                }
+                continue;
             } else {
-                Car parkedCar = parkedCars[lot];
+                sb.append(slot+1).append("\t\t");
+                Car parkedCar = parkedCars[slot];
                 sb.append(parkedCar.getLicensePlate()).append("\t\t");
                 sb.append(parkedCar.getColor()).append("\n");
             }
         }
-        return sb.toString();
+        return sb.substring(0, sb.length()-1);
     }
 
     /**
@@ -208,8 +211,8 @@ public class ParkingLot {
      */
     public List<Car> getCarsWithColor(String color) {
         List<Car> cars = new ArrayList<>();
-        for (int lot=0; lot < capacity; lot++) {
-            Car parkedCar = parkedCars[lot];
+        for (int slot=0; slot < capacity; slot++) {
+            Car parkedCar = parkedCars[slot];
             if (parkedCar != null && parkedCar.getColor().equals(color)) {
                 cars.add(parkedCar);
             }
@@ -226,20 +229,28 @@ public class ParkingLot {
      */
     public List<Integer> getSlotsNumberForCarsWithColor(String color) {
         List<Integer> slots = new ArrayList<>();
-        for (int lot=0; lot < capacity; lot++) {
-            Car parkedCar = parkedCars[lot];
+        for (int slot=0; slot < capacity; slot++) {
+            Car parkedCar = parkedCars[slot];
             if (parkedCar != null && parkedCar.getColor().equals(color)) {
-                slots.add(lot);
+                slots.add(slot);
             }
         }
         return slots;
     }
 
+    /**
+     * Gets the slot number of the {@link Car} that has the same license plate
+     * as the input license plate.
+     * 
+     * @param id the license plate of the {@link Car} to be searched.
+     * @return the slot number of the {@link Car} that has the same license plate,
+     *    or -1 if not found.
+     */
     public int getSlotNumberForId(String id) {
-        for (int lot=0; lot < capacity; lot++) {
-            Car parkedCar = parkedCars[lot];
+        for (int slot=0; slot < capacity; slot++) {
+            Car parkedCar = parkedCars[slot];
             if (parkedCar != null && parkedCar.getLicensePlate().equals(id)) {
-                return lot;
+                return slot;
             }
         }
         return -1;

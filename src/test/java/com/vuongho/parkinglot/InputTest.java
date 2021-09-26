@@ -1,6 +1,5 @@
 package com.vuongho.parkinglot;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
@@ -43,6 +42,7 @@ public class InputTest {
                 if(!actualOutput.equals(expectedOutput)) {
                     hasWrong = true;
                     System.out.println("Wrong answer at line " + lineNumInput + " with input \"" + input + "\": " + actualOutput);
+                    System.out.println("Expected: " + expectedOutput);
                 }
                 lineNumInput++;
             }
