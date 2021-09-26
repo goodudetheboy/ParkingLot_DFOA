@@ -56,6 +56,21 @@ public class UnitTest {
         "5\t\tIYTE32\t\tBlue\n" +
         "6\t\tMNG728\t\tBlack";
         assertEquals(expected, parkingLotMgr.status());
+
+        parkingLotMgr = new ParkingLotMgr();
+        parkingLotMgr.createParkingLot(0);
+        expected = "Slot No.\tID\t\tColor";
+        assertEquals(expected, parkingLotMgr.status());
+
+        parkingLotMgr = new ParkingLotMgr();
+        parkingLotMgr.createParkingLot(3);
+        assertEquals(expected, parkingLotMgr.status());
+        expected =
+        "Slot No.\tID\t\tColor\n" +
+        "1\t\t(empty)\n" +
+        "2\t\t(empty)\n" +
+        "3\t\t(empty)";
+        assertEquals(expected, parkingLotMgr.status(true));
     }
 
     @Test

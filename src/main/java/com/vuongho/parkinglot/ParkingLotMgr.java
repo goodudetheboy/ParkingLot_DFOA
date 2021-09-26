@@ -179,14 +179,25 @@ public class ParkingLotMgr {
      * Checks the status of the current {@link ParkingLot} stored in this
      * {@link ParkingLotMgr}.
      * 
-     * @param args command array
      * @return the string status of the current {@link ParkingLot}
      */
     public String status() {
+        return status(false);
+    }
+
+    /**
+     * Checks the status of the current {@link ParkingLot} stored in this
+     * {@link ParkingLotMgr} with fullInfo options.
+     * 
+     * @param fullInfo true to show full info (empty slots incl.), false to
+     *      show compact info
+     * @return the string status of the current {@link ParkingLot}
+     */
+    public String status(boolean fullInfo) {
         if (parkingLot == null) {
             return "Please create a parking lot first";
         }
-        return parkingLot.status(false);
+        return parkingLot.status(fullInfo);
     }
 
     /**
