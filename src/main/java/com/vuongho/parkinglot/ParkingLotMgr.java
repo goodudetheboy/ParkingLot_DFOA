@@ -91,7 +91,7 @@ public class ParkingLotMgr {
      * @param capacity capacity of {@link ParkingLot}
      * @return appropriate message from creating the parking lot
      */
-    String createParkingLot(int capacity) {
+    public String createParkingLot(int capacity) {
         parkingLot = new ParkingLot(capacity);
         return "Created a parking lot with " + capacity + " slots";
     }
@@ -112,7 +112,7 @@ public class ParkingLotMgr {
         return park(licensePlate, color);
     }
 
-    String park(String licensePlate, String color) {
+    public String park(String licensePlate, String color) {
         if (parkingLot == null) {
             return "Please create a parking lot first";
         }
@@ -149,7 +149,7 @@ public class ParkingLotMgr {
      * @param slot slot number
      * @return appropriate message from processing the command
      */
-    String leave(int slot) {
+    public String leave(int slot) {
         if (parkingLot == null) {
             return "Please create a parking lot first";
         }
@@ -182,7 +182,7 @@ public class ParkingLotMgr {
      * @param args command array
      * @return the string status of the current {@link ParkingLot}
      */
-    String status() {
+    public String status() {
         if (parkingLot == null) {
             return "Please create a parking lot first";
         }
@@ -217,7 +217,7 @@ public class ParkingLotMgr {
      * @param args command array
      * @return the license number of the {@link Car}s with the specified color
      */
-    String idsForCarsWithColor(String color) {
+    public String idsForCarsWithColor(String color) {
         if (parkingLot == null) {
             return "Please create a parking lot first";
         }
@@ -261,7 +261,10 @@ public class ParkingLotMgr {
      * @param color color of the {@link Car}
      * @return the license number of the {@link Car}s with the specified color
      */
-    String slotsForCarsWithColor(String color) {
+    public String slotsForCarsWithColor(String color) {
+        if (parkingLot == null) {
+            return "Please create a parking lot first";
+        }
         List<Integer> slots = parkingLot.getSlotsNumberForCarsWithColor(color);
         StringBuilder sb = new StringBuilder();
         // checks in case there is no car with the specified color
@@ -294,7 +297,7 @@ public class ParkingLotMgr {
      * @param id license plate of the {@link Car}
      * @return the slot number of the {@link Car} with the specified license plate
      */
-    String slotForId(String id) {
+    public String slotForId(String id) {
         if (parkingLot == null) {
             return "Please create a parking lot first";
         }
@@ -321,7 +324,7 @@ public class ParkingLotMgr {
         Scanner sc = new Scanner(System.in);
         while (true) {
             String command = sc.nextLine();
-            if (command.equals("quit")) {
+            if (command.equals("exit")) {
                 break;
             }
             String message = pMgr.giveCommand(command);
