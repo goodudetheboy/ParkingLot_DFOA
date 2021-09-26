@@ -21,6 +21,10 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 }
 
+jar {
+    destinationDirectory = file('./bin/')
+}
+
 application {
     // Define the main class for the application.
     mainClass = 'com.vuongho.parkinglot.ParkingLotMgr'
