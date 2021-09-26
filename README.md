@@ -69,8 +69,8 @@ System.out.println(parkingLotMgr.slotForId());
 
 The project uses Gradle for building. Standard gradle tasks for the java plugin can be found [here](https://docs.gradle.org/current/userguide/java_plugin.html). They can be invoked on the command line by running `gradlew` or `gradlew.bat` with the name of the task, for example `gradlew jar` to create the jar archive.
 
-This can also be build by running `./bin/setup` in bash. It will build the project, export the .jar archive to the `./bin/` folder, and run the test suite.
+This can also be build by running `bash ./bin/setup` in bash. It will build the project, export the .jar archive to the `./bin/` folder, and run the test suite.
 
 ## Running ##
 
-Run `./bin/parking_lot` to open the REPL and test the project out interactively, or you can put your commands in a `command.txt` folder and use it as argument by `./bin/parking_lot command.txt`.
+Run `bash ./bin/parking_lot` to open the REPL and test the project out interactively, or you can put your commands in a `command.txt` folder and use it as argument by `bash ./bin/parking_lot command.txt`.
