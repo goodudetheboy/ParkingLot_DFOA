@@ -59,7 +59,6 @@ To get slot number of cars with a certain color:
 System.out.println(parkingLotMgr.slotsForCarsWithColor());
 ```
 
-
 To get slot number of a car with a certain license plate
 
 ```java
