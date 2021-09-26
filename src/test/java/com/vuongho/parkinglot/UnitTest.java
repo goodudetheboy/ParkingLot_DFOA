@@ -89,5 +89,14 @@ public class UnitTest {
     public void invalidCommandTest() {
         ParkingLotMgr parkingLotMgr = parkingLotMgrInit();
         assertEquals("Invalid command", parkingLotMgr.giveCommand("invalid"));
+
+        // The following tests when parking lot has not been created
+        parkingLotMgr = new ParkingLotMgr();
+        assertEquals("Please create a parking lot first", parkingLotMgr.park("SMTH", "White"));
+        assertEquals("Please create a parking lot first", parkingLotMgr.leave(1));
+        assertEquals("Please create a parking lot first", parkingLotMgr.status());
+        assertEquals("Please create a parking lot first", parkingLotMgr.idsForCarsWithColor("White"));
+        assertEquals("Please create a parking lot first", parkingLotMgr.slotsForCarsWithColor("White"));
+        assertEquals("Please create a parking lot first", parkingLotMgr.slotForId("SMTH"));
     }
 }
